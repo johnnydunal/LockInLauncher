@@ -18,7 +18,7 @@ def stop():
 
 # List of apps to open and close
 apps_to_open = [r"C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE", r"C:\Users\johnn\AppData\Local\Programs\Microsoft VS Code\Code.exe"]
-blacklist = [r"Spotify.exe", r"C:\Program_Files_(x86)\Steam\Steam.exe", r"discord.exe"]
+blacklist = ["Spotify.exe", "Steam.exe", "Discord.exe"]
 
 # Closing Apps:
 
