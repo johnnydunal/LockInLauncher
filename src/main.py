@@ -12,8 +12,8 @@ from rich import print
 import threading
 import time
 
-from appmanager import kill_distracting_apps, openapps, check_for_banned_apps
-import state
+from src.appmanager import kill_distracting_apps, openapps, check_for_banned_apps
+import src.state as state
 
 app = typer.Typer()
 
@@ -37,7 +37,7 @@ def start():
         if user_command == "end":
             state.is_locked_in = False
             print("[green]Session ended. Great job staying focused![/green]")
-            time.sleep(2)
+            time.sleep(1)
             break
 
 

@@ -1,0 +1,11 @@
+{
+    "blocked_sites": [
+        "reddit.com",
+        "youtube.com",
+        "twitter.com"
+    ],
+    "blocked_apps": [
+        "discord.exe",
+        "spotify.exe"
+    ]
+}

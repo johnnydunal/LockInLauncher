@@ -6,16 +6,18 @@ import subprocess
 import psutil
 import time
 
-import state
+import src.state as state
+from src.config import load_config
 
-# List of apps to open and close
+# List of apps to open and close, loaded from the .config file
+project_info = load_config() # reading in data from the config file
+blocked_apps = project_info["blocked_apps"]
 apps_to_open = [r"C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE", r"C:\Users\johnn\AppData\Local\Programs\Microsoft VS Code\Code.exe"]
-blacklist = ["Spotify.exe", "Steam.exe", "Discord.exe", "Chrome.exe", "Netflix.exe"]
 
 # Closing Apps:
 def kill_distracting_apps():
     for proc in psutil.process_iter(['pid', 'name']):
-        if proc.info['name'].lower() in [app.lower() for app in blacklist]:
+        if proc.info['name'].lower() in [app.lower() for app in blocked_apps]:
             try:
                 proc.terminate()
                 proc.wait(timeout=1.5)
@@ -29,7 +31,7 @@ def kill_distracting_apps():
 def check_for_banned_apps():
     while state.is_locked_in:
         for proc in psutil.process_iter(['pid', 'name']):
-            if proc.info['name'].lower() in [app.lower() for app in blacklist]:
+            if proc.info['name'].lower() in [app.lower() for app in blocked_apps]:
                 try:
                     proc.terminate()
                     proc.wait(timeout=1.5)
