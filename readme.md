@@ -1,4 +1,4 @@
-# LockInLauncher 🔒
+# LockInLauncher
 
 **Ever sit down to study and somehow lose 3 hours to absolutely nothing? LockInLauncher fixes that. One command kills the distractions, launches your tools, and starts your focus timer — no willpower required.**
 
