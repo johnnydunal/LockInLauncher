@@ -1,11 +1,10 @@
 {
-    "blocked_sites": [
-        "reddit.com",
-        "youtube.com",
-        "twitter.com"
-    ],
     "blocked_apps": [
         "discord.exe",
         "spotify.exe"
+    ],
+    "apps_to_open": [
+        "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+        "C:\\Users\\johnn\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
     ]
 }
