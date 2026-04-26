@@ -4,6 +4,7 @@
 
 > ⚠️ Windows only for now. Mac & Linux support is on the roadmap.
 
+[![PyPI](https://img.shields.io/pypi/v/lockinlauncher)](https://pypi.org/project/lockinlauncher/)
 ---
 
 ## Features
