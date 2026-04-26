@@ -38,7 +38,7 @@ def check_for_banned_apps():
                     proc.wait(timeout=1)
                 except psutil.TimeoutExpired:
                     proc.kill()
-                except psutil.NoSuchProcess:
+                except Exception:
                     pass
         time.sleep(4)  # Check every 4 seconds
 

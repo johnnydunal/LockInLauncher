@@ -11,12 +11,11 @@ import typer
 from rich import print
 import threading
 import time
-import keyboard
 import msvcrt
 
 from src.appmanager import kill_distracting_apps, openapps, check_for_banned_apps
 from src.appearance import display_welcome_message, manage_display
-from src.config import manage_config
+from src.config import manage_config, load_config
 import src.state as state
 
 app = typer.Typer()
@@ -28,6 +27,16 @@ def start():
     # Start the session:
     state.is_locked_in = True
     display_welcome_message()
+
+    # Check if first time AND greet user
+    config = load_config()
+    if not config["blocked_apps"] and not config["apps_to_open"]:
+        print("[cyan]👋 Welcome to LockInLauncher! Looks like this is your first time.[/cyan]")
+        print("[cyan]Run 'lockin config' to set up which apps to block and open during your sessions.[/cyan]")
+        print("[dim]Continuing without any apps configured...[/dim]")
+        print()
+    elif not len(load_config()["user_name"]) == 0:
+        print(f"[cyan]Welcome Back, [bold]{load_config()['user_name']}[/bold]![/cyan]")
 
     # Find length of study session:
     session_length = 0
@@ -82,7 +91,6 @@ def flush_input():
 # The command that allows user to customize settings/preferences
 @app.command()
 def config():
-    print("[red]Note: This config menu is still a work in progress![/red]") # TEMPORARY
     display_welcome_message()
     manage_config()
 

@@ -8,6 +8,7 @@ import time
 import src.state as state
 
 def display_time(timer_length):
+    
     time_remaining = timer_length * 60
     
     with Live(Table(title="Live Data"), refresh_per_second=2) as live:

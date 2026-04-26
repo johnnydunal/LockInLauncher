@@ -1,10 +1,5 @@
 {
-    "blocked_apps": [
-        "discord.exe",
-        "spotify.exe"
-    ],
-    "apps_to_open": [
-        "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
-        "C:\\Users\\johnn\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-    ]
+    "user_name": "",
+    "blocked_apps": [],
+    "apps_to_open": []
 }
