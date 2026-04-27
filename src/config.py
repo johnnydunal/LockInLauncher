@@ -12,13 +12,25 @@ import time
 import psutil
 import subprocess
 
+# Default config values (used if config file doesn't exist)
+DEFAULT_CONFIG = {
+    "user_name": "",
+    "blocked_apps": [],
+    "apps_to_open": []
+}
+
 # Define path to config file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
+# CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
+CONFIG_PATH = os.path.join(os.environ["APPDATA"], "LockInLauncher", "config.json")
 
 # READING FROM JSON FILE
 def load_config():
+    os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
     try:
+        if not os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, "w") as f:
+                json.dump(DEFAULT_CONFIG, f, indent=4)
         with open(CONFIG_PATH, 'r') as file:
             return json.load(file)
     except Exception:

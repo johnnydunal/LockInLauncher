@@ -42,6 +42,9 @@ def start():
     session_length = 0
     while True:
         length = input("How many minutes do you want to focus for? ")
+        if length.strip() == "0":
+            print("0 minutes, Really? You're already done? Impressive work ethic. 🏆")
+            exit()
         try:
             session_length = int(length)
             if 0 < session_length < 360:
