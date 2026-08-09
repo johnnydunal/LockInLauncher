@@ -18,6 +18,9 @@ from src.appearance import display_welcome_message, manage_display
 from src.config import manage_config, load_config
 import src.state as state
 
+# For testing:
+from src.test_features import run_tests
+
 app = typer.Typer()
 
 # The command that starts a session
@@ -43,7 +46,7 @@ def start():
     while True:
         length = input("How many minutes do you want to focus for? ")
         if length.strip() == "0":
-            print("0 minutes, Really? You're already done? Impressive work ethic. 🏆")
+            print("0 minutes, Really? You're already done? Impressive work ethic.")
             exit()
         try:
             session_length = int(length)
@@ -58,7 +61,7 @@ def start():
     kill_distracting_apps()
     openapps()
     print("[cyan]Session started! It will end automatically one your timer runs out. Stay FOCUSED![/cyan]")
-    print("[yellow]Note: Closing this window is cheating. But we won't stop you... 👀[/yellow]")
+    print("[yellow]Note: Closing this window is cheating. But we won't stop you...[/yellow]")
     print()
     
     # Start a background thread for the timer and other utilities
@@ -96,6 +99,11 @@ def flush_input():
 def config():
     display_welcome_message()
     manage_config()
+
+# Command for testing features that might be implemented later. Not meant for end users.
+@app.command()
+def test():
+    run_tests()
 
 if __name__ == "__main__":
     app()
