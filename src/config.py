@@ -16,6 +16,7 @@ import subprocess
 DEFAULT_CONFIG = {
     "user_name": "",
     "blocked_apps": [],
+    "blocked_sites": [],
     "apps_to_open": []
 }
 
@@ -45,6 +46,15 @@ def save_config(config_data):
     except Exception:
         rich.print("[red]Error: Could not write to the config file.[/red]")
 
+# FULLY RESETTING JSON CONFIG FILE
+def reset_config():
+    try:
+        with open(CONFIG_PATH, 'w') as file:
+            json.dump(DEFAULT_CONFIG, file, indent=4)
+        rich.print("[green]The config file has been fully reset to default.[/green]")
+    except Exception:
+        rich.print("[red]Error: Could not reset the config file.[/red]")
+
 # MANAGING CONFIGURATION SETTINGS
 def manage_config():
     config = load_config()
@@ -61,7 +71,7 @@ def manage_config():
     rich.print("[dim]Here, you can customize your settings and preferences, such as what apps are blocked or opened during lockin sessions.[/dim]")
     print()
 
-    message_array = ["Type the number that corresponds with the command you wish to run:", "1) View Settings", "2) Modify Name", "3) Add/Remove Blocked App", "4) Add/Remove Open on Startup App", "5) Exit"]
+    message_array = ["Type the number that corresponds with the command you wish to run:", "1) View Settings", "2) Modify Name", "3) Add/Remove Blocked App", "4) Add/Remove Blocked Website", "5) Add/Remove Open on Startup App", "6) Exit"]
 
     while True:
         slow_type(message_array, 0.006)
@@ -77,11 +87,13 @@ def manage_config():
             case "3":
                 add_or_remove_blocked_app()
             case "4":
-                add_or_remove_open_on_startup_app()
+                add_or_remove_blocked_site()
             case "5":
+                add_or_remove_open_on_startup_app()
+            case "6":
                 exit_config()
             case _:
-                rich.print("[red]Please enter a valid number 1-5![/red]")
+                rich.print("[red]Please enter a valid number 1-6![/red]")
 
         print() # For Spacing   
 
@@ -111,6 +123,17 @@ def view_settings():
         settings.append("None")
         settings.append("")
 
+    # Adding the blocked websites:
+    blocked_sites = load_config()["blocked_sites"]
+    if blocked_sites:
+        settings.append("Blocked Websites:")
+        settings.extend(blocked_sites)
+        settings.append("")
+    else:
+        settings.append("Blocked Websites:")
+        settings.append("None")
+        settings.append("")
+
     # Adding the apps to open:
     apps_to_open = load_config()["apps_to_open"]
     if apps_to_open:
@@ -136,7 +159,7 @@ def modify_name():
     save_config(config)
     slow_type(["Your name was updated."], 0.04)
 
-# Ask whether to ADD or REMOVE blocked app
+# Ask whether to ADD or REMOVE blocked APP
 def add_or_remove_blocked_app():
     while True:
         command = input("Type 'add' to add a blocked app, or 'remove' to remove one: ")
@@ -151,7 +174,7 @@ def add_or_remove_blocked_app():
         else:
             rich.print("[red]Please enter a valid command ('add' or 'remove').[/red]")
 
-# ADDING a blocked app
+# ADDING a blocked APP
 def add_blocked_app():
     config = load_config()
     if config is None:
@@ -181,7 +204,7 @@ def add_blocked_app():
     except Exception:
         rich.print(f"[red]Error: Could not add {app_name} to the blocked apps list.[/red]")
 
-# REMOVING a blocked app
+# REMOVING a blocked APP
 def remove_blocked_app():
     config = load_config()
     if config is None:
@@ -211,6 +234,80 @@ def remove_blocked_app():
         rich.print(f"[green]{match} has been removed from the blocked apps list.[/green]")
     except Exception:
         rich.print(f"[red]Error: Could not remove {app_name} from the blocked apps list.[/red]")
+
+# Ask whether to ADD or REMOVE a blocked WEBSITE
+def add_or_remove_blocked_site():
+    while True:
+        command = input("Type 'add' to add a blocked website, or 'remove' to remove one: ")
+        if command.lower() == "add":
+            print()
+            add_blocked_site()
+            break
+        elif command.lower() == "remove":
+            print()
+            remove_blocked_site()
+            break
+        else:
+            rich.print("[red]Please enter a valid command ('add' or 'remove').[/red]")
+
+# ADDING a blocked WEBSITE
+def add_blocked_site():
+    config = load_config()
+    if config is None:
+        return
+    
+    # Getting website name from user:
+    rich.print("[dim]Tip: Do not include 'www.' when adding websites to block.[/dim]")
+    rich.print("[dim]For Example: To block Youtube, enter 'youtube.com'.[/dim]")
+    site_name = input("Enter website domain to block: ").strip().lower()
+    print()
+
+    # Veryfying Website:
+    if site_name.equals("") or len(site_name) < 3:
+        rich.print(f"[yellow]Please enter a valid domain name.[/yellow]")
+        return
+    
+    if site_name in [site.strip().lower() for site in config["blocked_sites"]]:
+        rich.print(f"[yellow]'{site_name}' is already in the blocked sites list.[/yellow]")
+        return
+    
+    try:
+        config["blocked_sites"].append(site_name)
+        save_config(config)
+        rich.print(f"[green]'{site_name}' has been added to the blocked sites list.[/green]")
+    except Exception:
+        rich.print(f"[red]Error: Could not add '{site_name}' to the blocked sites list.[/red]")
+
+# REMOVING a blocked WEBSITE
+def remove_blocked_site():
+    config = load_config()
+    if config is None:
+        return
+
+    # In case there are no blocked sites
+    if len(config["blocked_sites"]) == 0:
+        rich.print("[cyan]There are currently no blocked websites. Try adding some![/cyan]")
+        return
+
+    # Showing options to the user
+    rich.print("[cyan]Currently Blocked Websites:[/cyan]")
+    for site in config["blocked_sites"]:
+        rich.print(f"[dim]{site}[/dim]")
+    
+    site_name = input("Enter the name of the website to remove: ").strip().lower()
+    
+    # Check if the site exists in blocked_sites
+    match = next((site for site in config["blocked_sites"] if site.lower() == site_name), None)
+    if match is None:
+        rich.print(f"[yellow]⚠️ '{site_name}' is not in the blocked websites list. Check for typos![/yellow]")
+        return
+    
+    try:
+        config["blocked_sites"].remove(match)
+        save_config(config)
+        rich.print(f"[green]'{match}' has been removed from the blocked sites list.[/green]")
+    except Exception:
+        rich.print(f"[red]Error: Could not remove '{site_name}' from the blocked sites list.[/red]")
 
 # Ask whether to ADD or REMOVE an open on startup app
 def add_or_remove_open_on_startup_app():
@@ -292,7 +389,8 @@ def remove_open_on_startup_app():
         app_num = int(app_num)
         if 1 <= app_num <= len(config["apps_to_open"]):
             try:
-                del config["apps_to_open"][i - 1]
+                # Use the user's chosen number (app_num) to remove the correct entry
+                del config["apps_to_open"][app_num - 1]
                 save_config(config)
                 rich.print(f"[green]This app has been removed from the apps to open list.[/green]")
             except Exception:

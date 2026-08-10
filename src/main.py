@@ -15,7 +15,7 @@ import msvcrt
 
 from src.appmanager import kill_distracting_apps, openapps, check_for_banned_apps
 from src.appearance import display_welcome_message, manage_display
-from src.config import manage_config, load_config
+from src.config import manage_config, load_config, reset_config
 import src.state as state
 
 # For testing:
@@ -99,6 +99,11 @@ def flush_input():
 def config():
     display_welcome_message()
     manage_config()
+
+# Command for fully resetting the config file. Useful after adding new entries.
+@app.command()
+def resetconfig():
+    reset_config()
 
 # Command for testing features that might be implemented later. Not meant for end users.
 @app.command()
