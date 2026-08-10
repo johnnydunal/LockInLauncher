@@ -3,17 +3,16 @@
 '''
 
 import win32console, win32gui, win32con
+import ctypes
 import time
 import keyboard
 
 from src.websitemanager import _get_blocked_sites_from_config
 
 def run_tests():
-    ''' Disabled so that the website blocking features can be tested.
-    disable_ctrl_c()
-    wait_forever()
-    '''
+    pass
     # print(_get_blocked_sites_from_config())
+    # print(ctypes.windll.shell32.IsUserAnAdmin() != 0) # Returns whether the program has admin rights (necessary for modifying the hosts file)
 
 # Attempt at disabling Ctrl+C using the keyboard module. Careful, since this makes it hard to quit the program (which is technically what we want!).
 def disable_ctrl_c():
